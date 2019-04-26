@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- 提问 -->
+	<!-- <bean id="bookdao" class="com.buba.dao.BookDao"></bean>
+	<bean id="bookservice" class="com.buba.service.BookService"></bean> -->
+<!--重点 实验32：通过注解分别创建Dao、Service、Controllor 
+	Spring 提供使用注解方式 实现对象的注入
+	@Component	：注解普通的组件（bean）
+	@Repository ：推荐使用在dao层
+	@Service    ：推荐使用在service层
+	@Controllor ：推荐使用在servlet层 （servlet层）
+		在类上标记注解 相当于 在Spring配置文件中注册了bean标签
+		即向ioc容器中注册一个该类的对象
+		 bean标签  id:默认id为类名的首字母小写 bookDao
+		 	  class:
+		 	  scope:默认是单例
+		 步骤：
+		 1.添加注解
+		 2.Spring配置文件扫包
+		 	context:component-scan 引入context名称空间
+		 			base-package :指定扫包的名称，多个包使用逗号隔开
+	-->
+	<!-- <context:component-scan base-package="com.buba.dao,com.buba.service,com.buba.servlet"></context:component-scan>  -->
+<!-- 实验33：使用context:include-filter指定扫描包时要包含的类 -->
+	<!-- <context:component-scan base-package="">
+		annotation:按照注解方式排除
+		expression:注解的全限定类名
+		
+		assignable:按照类名排除
+		expression:类的全限定名称
+	</context:component-scan> -->
+	
+	<!-- include-filter 前提：取消默认扫包规则  
+		use-default-filters="false"
+	-->
+	 <context:component-scan base-package="com.buba" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>  
+<!-- 实验34：使用context:exclude-filter指定扫描包时不包含的类 -->
+	<!--  <context:component-scan base-package="com.buba">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>  -->
+<!--重点 实验35：使用@Autowired注解实现根据类型实现自动装配
+	  @Autowired
+	  1.按照类型进入ioc容器中查找
+	  	找不到：报错
+	  	找到一个：自动装配
+	  	找到多个：1.使用变量名作为id值 进行查找，找到就自动装配，找不到就报错
+	  @Qualifier("bd"):按照指定的id进行查找
+	  required=false:找不到就不装配，前提是@Qualifier也找了
+	  注意：修改注解的默认id值 @Repository("bd")
+ -->
+</beans>
